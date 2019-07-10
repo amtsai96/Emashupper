@@ -4,7 +4,8 @@ if sys_pf == 'darwin':
     import matplotlib
     matplotlib.use("Qt4Agg")
 
-from Tkinter import *
+#from Tkinter import *
+from tkinter import *
 from lib import pre, mashup
 from pandas import read_csv
 import os
@@ -126,13 +127,13 @@ class Window(QtGui.QWidget):
         # event helper for listbox slection
         # Note here that Tkinter passes an event object to onselect()
         if not self.cateListWidget.selectedItems():
-            print ("Please select a category first.")
+            print("Please select a category first.")
         else:
             index = self.cateListWidget.currentRow()
             value = self.cateListWidget.currentItem().text()
             self.cateIndex = index
             self.cateName = str(value)
-            print 'selected %d: "%s"' % (index, value)
+            print('selected %d: "%s"' % (index, value))
   
     def actionElements(self):
         # initialze buttons,labels...
@@ -257,13 +258,13 @@ class Window(QtGui.QWidget):
         c = self.csv # To simpilfy 
         self.seedIndex = c.index[c['song name'] == self.seedName].tolist()[0]
         self.seedSegCount= self.csv['segmentation count'][self.seedIndex]
-        print self.seedIndex
-        print self.seedName
+        print(self.seedIndex)
+        print(self.seedName)
         self.seed = [None] * self.seedSegCount
-        for i in xrange(0,self.seedSegCount):
+        for i in range(0,self.seedSegCount):
             name = pathJoin(PgzLocation+self.cateName+'/inst/',self.seedName+'(inst)'+'_'+str(i+1)+'.pgz')
             self.seed[i] = pre.load(name)
-            print 'loaded ',self.seed[i].name
+            print('loaded ',self.seed[i].name)
         self.progressBar.setText("\nDone Loading Segments.")
 
     def seedGenerate(self):
@@ -287,7 +288,7 @@ class Window(QtGui.QWidget):
             signal = np.concatenate((signal,i.signal))
         
         # dr = Figure_Canvas()
-        # dr.draw([[i for i in xrange(len(signal))],self.seed[0].sr], signal,'Seed Song Waveplot')
+        # dr.draw([[i for i in range(len(signal))],self.seed[0].sr], signal,'Seed Song Waveplot')
         # graphicscene = QtGui.QGraphicsScene()
         # graphicscene.addWidget(dr)
         # self.graphicview.setScene(graphicscene)
@@ -321,13 +322,13 @@ class Window(QtGui.QWidget):
         for candIndex,candName in enumerate(self.csv['song name']):
             if candIndex == self.seedIndex:
                 continue
-            for candSegIndex in xrange(1,self.csv['segmentation count'][candIndex]+1):
+            for candSegIndex in range(1,self.csv['segmentation count'][candIndex]+1):
                 candSegPath = pathJoin(PgzLocation+self.cateName+'/inst/',candName+'(inst)'+'_'+str(candSegIndex)+'.pgz')
                 seg.append(pre.load(candSegPath))
-        print "loaded all segments"
+        print("loaded all segments")
 
         #Mashupping
-        for seedSegNow in xrange(0,self.seedSegCount):
+        for seedSegNow in range(0,self.seedSegCount):
             # iterate all segmentations in seed song
             maxMashability = -1000
             maxSeg = None
@@ -340,31 +341,31 @@ class Window(QtGui.QWidget):
                     maxSeg = cand
                     maxIndex = segIndex
                 if segIndex % 10  == 0:
-                    print 'compared : ',segIndex, ' of ' ,len(seg)
-            print 'maxSeg = ',maxSeg.name
+                    print('compared : ',segIndex, ' of ' ,len(seg))
+            print('maxSeg = ',maxSeg.name)
             mashabilityList[seedSegNow] = maxMashability
 
             vocalSegPath = pathJoin(SongPgzLocation+self.cateName+'/vocal/',maxSeg.name[:maxSeg.name.rfind('(inst')] + '(vocal)' + maxSeg.name[maxSeg.name.rfind('_'):]+'.pgz')
 
-            print 'Mashed File: '+ maxSeg.name[:maxSeg.name.rfind('(inst')] + '(vocal)' + maxSeg.name[maxSeg.name.rfind('_'):]+'.wav'
+            print('Mashed File: '+ maxSeg.name[:maxSeg.name.rfind('(inst')] + '(vocal)' + maxSeg.name[maxSeg.name.rfind('_'):]+'.wav')
             
             if maxMashability >= threshold :
                 self.mashup[seedSegNow] = pre.load(vocalSegPath)
             else:
                 print('Mashability = '+str(maxMashability)+' < Threshold , Skip ...')
 
-            print "Mashed : #"+str(seedSegNow+1)+" of "+str(self.seedSegCount)
+            print("Mashed : #"+str(seedSegNow+1)+" of "+str(self.seedSegCount))
 
             del seg[maxIndex]
 
-        print 'selected : '
+        print('selected : ')
         for index, candSeg in enumerate(self.mashup):
             if candSeg :
-                print candSeg.name,' : ', mashabilityList[index]
+                print(candSeg.name,' : ', mashabilityList[index])
 
         seg = [None] * self.seedSegCount
 
-        for i in xrange(self.seedSegCount):
+        for i in range(self.seedSegCount):
             # overlay cand and seed
             if self.mashup[i] :
                 instSegPath = pathJoin(WavLocation+self.cateName+'/inst/',maxSeg.name + '.wav')
@@ -390,7 +391,7 @@ class Window(QtGui.QWidget):
         mashabilityList = [None]*self.seedSegCount
         mashupedDic={}
         threshold = 0.82
-        for seedSegNow in xrange(0,self.seedSegCount):
+        for seedSegNow in range(0,self.seedSegCount):
             # iterate all segmentations in seed song
             maxMashability = -1000
             candSeg = None
@@ -399,24 +400,24 @@ class Window(QtGui.QWidget):
                 # iterate all songs in database
                 if candIndex == self.seedIndex :
                     continue
-                for candSegIndex in xrange(1,self.csv['segmentation count'][candIndex]+1):
+                for candSegIndex in range(1,self.csv['segmentation count'][candIndex]+1):
                     # iterate all segmentations in candidate song
                     candSegPath = pathJoin(PgzLocation+self.cateName+'/inst/',candName+'_'+str(candSegIndex)+'.pgz')
                     if canSedPath[:-4] in mashupedDic:
-                        print canSedPath, ' is already mashupped '
+                        print(canSedPath, ' is already mashupped ')
                         continue
                     candSeg = pre.load(candSegPath)
                     mash = pre.Mashability(self.seed[seedSegNow], candSeg).mash()
                     if maxMashability < mash:
                         maxMashability = mash
                         maxSeg = candSeg
-                print 'compared :',candName
+                print('compared :',candName)
                 
                 if maxSeg is not None:
-                    print 'maxSeg = ',maxSeg.name
+                    print('maxSeg = ',maxSeg.name)
                     mashabilityList[seedSegNow] = maxMashability
     
-        print 'Mashed : #',seedSegNow+1 ,' of ', self.seedSegCount
+        print('Mashed : #',seedSegNow+1 ,' of ', self.seedSegCount)
     
         vocalSegPath = pathJoin(SongPgzLocation+self.cateName+'/vocal/',maxSeg.name[:maxSeg.name.rfind('(inst')] + '(vocal)' + maxSeg.name[maxSeg.name.rfind('_'):]+'.pgz')
         
@@ -426,13 +427,13 @@ class Window(QtGui.QWidget):
             
         mashupedDic.add({maxSeg.name:True})
 
-        print 'selected : '
+        print('selected : ')
         for index, candSeg in enumerate(self.mashup):
-            print candSeg.name,' : ', mashabilityList[index]
+            print(candSeg.name,' : ', mashabilityList[index])
 
 
         seg = [None] * self.seedSegCount
-        for i in xrange(self.seedSegCount):
+        for i in range(self.seedSegCount):
             # overlay cand and seed
             if self.mashup[i] :
                 instSegPath = pathJoin(cateLocation+self.cateName+WavLocation,maxSeg.name + '.wav')
@@ -452,17 +453,17 @@ class Window(QtGui.QWidget):
     
     def mashupSong(self):
         if LoadMode == 0:
-            print 'Load canidate seperately'
+            print('Load canidate seperately')
             self.mashupLoadSeperately()
         elif LoadMode == 1:
-            print 'Load canidate at once'
+            print('Load canidate at once')
             self.mashupLoadAtOnce()
 
     def saveMashuped(self):
         outputFile = str(nameJoin(str(nameJoin('./',self.seedName)),'_mashupped.wav'))
         librosa.output.write_wav(outputFile,self.mashuppedSig,self.seed[0].sr)
         mashup.volume_adjust(outputFile)
-        print ('\nDone processing mashupped song.')
+        print('\nDone processing mashupped song.')
 
     def playMashuped(self):
         mashsound = pygame.mixer.Sound(str(nameJoin(self.seedName,'_mashupped(NORMALIZED).wav')))
@@ -477,7 +478,7 @@ class Window(QtGui.QWidget):
     def showMashuped(self):
         if len(self.mashuppedSig) >= 1 :
             # dr = Figure_Canvas()
-            # dr.draw([[i for i in xrange(len(self.mashuppedSig))],self.seed[0].sr], self.mashuppedSig,'Mashupped Song Waveplot')
+            # dr.draw([[i for i in range(len(self.mashuppedSig))],self.seed[0].sr], self.mashuppedSig,'Mashupped Song Waveplot')
             # graphicscene = QtGui.QGraphicsScene()
             # graphicscene.addWidget(dr)
             # self.graphicview.setScene(graphicscene)
@@ -491,10 +492,10 @@ class Window(QtGui.QWidget):
 
 if __name__ == '__main__':
 
-    print 'Data : ',DataLocationA
-    print 'pgz(inst) : ', PgzLocation
-    print 'pgz(vocal) : ', SongPgzLocation
-    print 'wav : ', WavLocation
+    print('Data : ',DataLocationA)
+    print('pgz(inst) : ', PgzLocation)
+    print('pgz(vocal) : ', SongPgzLocation)
+    print('wav : ', WavLocation)
 
     app = QtGui.QApplication(sys.argv)
     window = Window()

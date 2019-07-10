@@ -6,7 +6,8 @@ import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
-import cPickle
+#import cPickle
+import pickle
 import gzip
 import pyrubberband as pyrb
 
@@ -31,7 +32,7 @@ class PreAudio:
 
     def __init__(self, filePath):
         self.name = os.path.splitext(os.path.basename(filePath))[0]
-        self.signal, self.sr = librosa.load(filePath,sr=None)
+        self.signal, self.sr = librosa.load(filePath, sr=None)
         self.chroma = librosa.feature.chroma_stft(self.signal, sr=self.sr)
         self.tempo = librosa.beat.beat_track(self.signal, sr=self.sr)[0]
 #        self.tempo = librosa.beat.tempo(self.signal)
@@ -63,7 +64,7 @@ class PreAudio:
             self.visualize('chromagram')
             self.visualize('spectrogram')
         else:
-            print "ERROR : Mode Error"
+            print("ERROR : Mode Error")
 
     def stretch_seg(self, frameCount):
         # parameter should be tuned
@@ -96,11 +97,10 @@ class PreAudio:
         self.chroma = librosa.feature.chroma_stft(self.signal)
         self.tempo = librosa.beat.tempo(self.signal)
         self.spec = librosa.feature.melspectrogram(self.signal, sr=self.sr)
-        print 'adjusted : ', self.name, ' with ', count - 1, ' times aprroaching', ' with multiplier = ', multiplier
+        print('adjusted : ', self.name, ' with ', count - 1,
+              ' times aprroaching', ' with multiplier = ', multiplier)
 
     def save(self, savePath):
         with gzip.open(os.path.join(savePath, self.name+'.pgz'), 'wb') as pgz:
             cPickle.dump(self, pgz)
         # print "create ", self.name
-
-

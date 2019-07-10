@@ -1,11 +1,13 @@
 # -*- coding: utf8 -*-
 
 import os
-import cPickle
+#import cPickle
+import pickle
 import gzip
 from .PreAudio import *
 
-__all__=['write','preprocessing','load']
+__all__ = ['write', 'preprocessing', 'load']
+
 
 def write(filePath, savePath):
     '''
@@ -31,8 +33,8 @@ def preprocessing(inputPath, outputPath):
         for i, f in enumerate(files):
             if f.endswith('.wav'):
                 write(os.path.join(dirpath, f), outputPath)
-                print 'processed : '+f
-            print 'progress : ', i+1, ' of ', len(files)
+                print('processed : '+f)
+            print('progress : ', i+1, ' of ', len(files))
 
 
 def load(filePath):
@@ -40,5 +42,3 @@ def load(filePath):
     with gzip.open(filePath, 'rb') as pgz:
         f = cPickle.load(pgz)
         return f
-
-
