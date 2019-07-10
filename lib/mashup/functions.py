@@ -22,14 +22,14 @@ def volume_adjust(input_file):
 
 def fade_in(sig, sr, time=2500):
     length = int(sr * time * 0.001)
-    for i in xrange(length):
+    for i in range(length):
         sig[i] = sig[i] * i / length
 
 
 def fade_out(sig, sr, time=2500):
     length = int(sr * time * 0.001)
     sigLength = len(sig)
-    for i in xrange(length):
+    for i in range(length):
         sig[sigLength-i-1] = sig[sigLength-i-1] * i / length
 
 
@@ -52,11 +52,11 @@ def beat_matching(candSig, candSr, seedSig, seedSr, vocalSig, vocalSr):
     seedBeatsIndex = np.int_(np.round_(seedBeatsTime * seedSr))
 
     # candBeatsDiff = np.zeros(len(candBeats)-1)
-    # for i in xrange(len(candBeats)-1):
+    # for i in range(len(candBeats)-1):
     #     candBeatsDiff[i] = candBeats[i+1] - candBeats[i]
 
     # seedBeatsDiff = np.zeros(len(seedBeats)-1)
-    # for i in xrange(len(seedBeats)-1):
+    # for i in range(len(seedBeats)-1):
     #     seedBeatsDiff[i] = seedBeats[i+1] - seedBeats[i]
 
     resultSig = np.zeros(len(seedSig))
@@ -87,13 +87,13 @@ def beat_matching(candSig, candSr, seedSig, seedSr, vocalSig, vocalSr):
         # print shift_size
 
         if shift_size > 0:
-            for i in xrange(len(stretchedSig)):
+            for i in range(len(stretchedSig)):
                 if i+shift_size >= len(shiftedSig):
                     break
                     shiftedSig[i+shift_size] = stretchedSig[i]
 
         elif shift_size < 0:
-            for i in xrange(len(shiftedSig)):
+            for i in range(len(shiftedSig)):
                 if i-shift_size >= len(stretchedSig):
                     break
                 shiftedSig[i] = stretchedSig[i-shift_size]
@@ -110,7 +110,7 @@ def beat_matching(candSig, candSr, seedSig, seedSr, vocalSig, vocalSr):
 #        librosa.output.write_wav(out,shiftedSig,seedSr)
 
 
-#        for i in xrange(len(seedSig)):
+#        for i in range(len(seedSig)):
 #            if i >= len(shiftedSig):
 #                shiftedSig = np.concatenate((shiftedSig, seedSig[i:]*0.5))
 #                break
@@ -121,7 +121,7 @@ def beat_matching(candSig, candSr, seedSig, seedSr, vocalSig, vocalSr):
 
     else:
         # M2: cand needs to match 'each beat' of seed
-        for j in xrange(0, len(seedBeatsIndex)+1, degree):
+        for j in range(0, len(seedBeatsIndex)+1, degree):
          #     print j,j/degree
             if j/degree >= len(candBeatsIndex):
                 break
@@ -130,7 +130,7 @@ def beat_matching(candSig, candSr, seedSig, seedSr, vocalSig, vocalSr):
                 1 if j == len(seedBeatsIndex) else seedBeatsIndex[j]
             end = -1 if j == 0 else seedBeatsIndex[j-1]-1
 
-            for i in xrange(start, end, -degree):
+            for i in range(start, end, -degree):
                 index = candBeatsIndex[j/degree]+i-start
                 if index < 0 or index >= len(candSig):
                     break
@@ -156,7 +156,7 @@ def beat_matching(candSig, candSr, seedSig, seedSr, vocalSig, vocalSr):
                 out = '../../resultM2_sound.wav'
         librosa.output.write_wav(out, stretchedSig, seedSr)
 
-#        for i in xrange(len(seedSig)):
+#        for i in range(len(seedSig)):
 #            if i >= len(stretchedSig):
 #                stretchedSig = np.concatenate((stretchedSig, seedSig[i:]*0.5))
 #                break
@@ -197,14 +197,14 @@ def overlay(candSig, candSr, seedSig, seedSr, vocalSig, vocalSr):
 #    j=0
 #    resultSig = seedSig
 #
-#    for i in xrange(len(seedSig)):
+#    for i in range(len(seedSig)):
 #        if i >= seed_start_index and cand_start_index+j < cand_end_index :
 #            resultSig[i] = seedSig[i]*0.5 + candSig[cand_start_index+j]*0.5
 #            j+=1
 #        else:
 #            resultSig[i] = seedSig[i]
 
-    for i in xrange(len(seedSig)):
+    for i in range(len(seedSig)):
         if i >= len(resultSig):
             shiftedSig = np.concatenate((resultSig, seedSig[i:]))
             break
@@ -224,7 +224,7 @@ def bridging(preOrderSig, preOrderSr, postOrderSig, postOrderSr, overlapTime=250
     songLength = preLength - overlapLength + postLength
     resultSig = preOrderSig
 
-    for i in xrange(preLength+1):
+    for i in range(preLength+1):
         if i == preLength:
             postOrderSig = postOrderSig[overlapLength:]
             resultSig = np.concatenate((resultSig, postOrderSig))
