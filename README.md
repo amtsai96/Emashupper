@@ -2,7 +2,7 @@
 
 [Other file](https://goo.gl/38tSPf)
 # Dependencies
-1. Please Install PyQt4 Manually
+1. Please Install PyQt5 Manually
 2. pip install -r requirements.txt
 # How to Preprecossing  
 1.  Put all music files in a folder
