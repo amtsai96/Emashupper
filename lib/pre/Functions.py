@@ -40,5 +40,5 @@ def preprocessing(inputPath, outputPath):
 def load(filePath):
     '''load pgz file of PreAudio classs, which created by 'write' method'''
     with gzip.open(filePath, 'rb') as pgz:
-        f = cPickle.load(pgz)
+        f = pickle.load(pgz, encoding='latin1')
         return f

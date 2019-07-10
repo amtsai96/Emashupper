@@ -1,11 +1,12 @@
 # -*- coding:utf-8 -*-
+import sys
 from sys import platform as sys_pf
 if sys_pf == 'darwin':
     import matplotlib
     matplotlib.use("Qt4Agg")
 
 #from Tkinter import *
-from tkinter import *
+#from tkinter import *
 from lib import pre, mashup
 from pandas import read_csv
 import os
@@ -28,8 +29,7 @@ PgzLocation= os.path.join(DataLocationA,'pgz/')
 WavLocation= os.path.join(DataLocationA,'song/')
 
 from random import randint
-from PyQt4 import QtGui
-from PyQt4 import QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 pygame.mixer.init()
 pygame.mixer.set_num_channels(2)
@@ -68,9 +68,9 @@ class Figure_Canvas(FigureCanvas):
         self.axes.set_title(title)
         self.axes.plot(x[0],y)
 
-class Window(QtGui.QWidget):
+class Window(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.parent = parent
         self.initVar()
         self.initUI()
@@ -104,7 +104,7 @@ class Window(QtGui.QWidget):
 
     def listbox(self):
         # show all category list
-        self.cateListWidget = QtGui.QListWidget(self)
+        self.cateListWidget = QtWidgets.QListWidget(self)
         self.catelist = []
 
         s=filter(lambda x: os.path.isdir(os.path.join(WavLocation, x)), os.listdir(WavLocation)) 
@@ -137,7 +137,7 @@ class Window(QtGui.QWidget):
   
     def actionElements(self):
         # initialze buttons,labels...
-        seed_generate = QtGui.QPushButton("Generate Random Seed -> ")
+        seed_generate = QtWidgets.QPushButton("Generate Random Seed -> ")
         seed_generate.setFont(QtGui.QFont("Courier",15))
         seed_generate.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -145,13 +145,13 @@ class Window(QtGui.QWidget):
             ''')
         seed_generate.clicked.connect(self.seedGenerate)
 
-        self.seedNameShow = QtGui.QLabel("\nSeed: ")
+        self.seedNameShow = QtWidgets.QLabel("\nSeed: ")
         self.seedNameShow.setFont(QtGui.QFont("Courier",15))
         
-        self.progressBar = QtGui.QLabel("\n")
+        self.progressBar = QtWidgets.QLabel("\n")
         self.progressBar.setFont(QtGui.QFont("Courier",15))
 
-        load_file = QtGui.QPushButton("Load Seed Song Segments ")
+        load_file = QtWidgets.QPushButton("Load Seed Song Segments ")
         load_file.setFont(QtGui.QFont("Courier",15))
         load_file.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -159,7 +159,7 @@ class Window(QtGui.QWidget):
             ''')
         load_file.clicked.connect(self.load)
         
-        play_seed = QtGui.QPushButton("Play Seed Song")
+        play_seed = QtWidgets.QPushButton("Play Seed Song")
         play_seed.setFont(QtGui.QFont("Courier",15))
         play_seed.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -167,7 +167,7 @@ class Window(QtGui.QWidget):
             ''')
         play_seed.clicked.connect(self.playSeed)
         
-        stop_seed = QtGui.QPushButton("Stop Playing Seed")
+        stop_seed = QtWidgets.QPushButton("Stop Playing Seed")
         stop_seed.setFont(QtGui.QFont("Courier",15))
         stop_seed.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -175,7 +175,7 @@ class Window(QtGui.QWidget):
             ''')
         stop_seed.clicked.connect(self.stopPlaySeed)
         
-        show_seed = QtGui.QPushButton("Show Seed Wave")
+        show_seed = QtWidgets.QPushButton("Show Seed Wave")
         show_seed.setFont(QtGui.QFont("Courier",15))
         show_seed.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -183,7 +183,7 @@ class Window(QtGui.QWidget):
             ''')
         show_seed.clicked.connect(self.seedShow)
         
-        do_mash = QtGui.QPushButton("Mashup")
+        do_mash = QtWidgets.QPushButton("Mashup")
         do_mash.setFont(QtGui.QFont("Courier",15))
         do_mash.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -191,7 +191,7 @@ class Window(QtGui.QWidget):
             ''')
         do_mash.clicked.connect(self.mashupSong)
         
-        play_mash = QtGui.QPushButton("Play Mashupped Song")
+        play_mash = QtWidgets.QPushButton("Play Mashupped Song")
         play_mash.setFont(QtGui.QFont("Courier",15))
         play_mash.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -199,7 +199,7 @@ class Window(QtGui.QWidget):
             ''')
         play_mash.clicked.connect(self.playMashuped)
         
-        stop_mash = QtGui.QPushButton("Stop Playing")
+        stop_mash = QtWidgets.QPushButton("Stop Playing")
         stop_mash.setFont(QtGui.QFont("Courier",15))
         stop_mash.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -207,7 +207,7 @@ class Window(QtGui.QWidget):
             ''')
         stop_mash.clicked.connect(self.stopPlayMashuped)
         
-        show_mash = QtGui.QPushButton("Show Mashupped Song Wave")
+        show_mash = QtWidgets.QPushButton("Show Mashupped Song Wave")
         show_mash.setFont(QtGui.QFont("Courier",15))
         show_mash.setStyleSheet('''
             background-image: url('./material/button.png');
@@ -215,12 +215,12 @@ class Window(QtGui.QWidget):
             ''')
         show_mash.clicked.connect(self.showMashuped)
         
-        layout0 = QtGui.QVBoxLayout()
+        layout0 = QtWidgets.QVBoxLayout()
         layout0.addWidget(seed_generate)
         layout0.setAlignment(QtCore.Qt.AlignTop)
 
-        emp = QtGui.QLabel("")
-        layout2 = QtGui.QVBoxLayout()
+        emp = QtWidgets.QLabel("")
+        layout2 = QtWidgets.QVBoxLayout()
         layout2.setAlignment(QtCore.Qt.AlignTop)
         layout2.addWidget(self.seedNameShow)
         layout2.addWidget(emp)
@@ -233,7 +233,7 @@ class Window(QtGui.QWidget):
         layout2.addWidget(emp)
         layout2.addWidget(show_seed)
 
-        layout3 = QtGui.QVBoxLayout()
+        layout3 = QtWidgets.QVBoxLayout()
         layout3.setAlignment(QtCore.Qt.AlignTop)
         layout3.addWidget(self.progressBar)
         layout3.addWidget(emp)
@@ -246,7 +246,7 @@ class Window(QtGui.QWidget):
         layout3.addWidget(emp)
         layout3.addWidget(show_mash)
 
-        layout = QtGui.QHBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         layout.addLayout(layout0)
         layout.addStretch()
         layout.addLayout(layout2)
@@ -497,7 +497,7 @@ if __name__ == '__main__':
     print('pgz(vocal) : ', SongPgzLocation)
     print('wav : ', WavLocation)
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = Window()
     window.show()
     sys.exit(app.exec_())

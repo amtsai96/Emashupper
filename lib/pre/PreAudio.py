@@ -102,5 +102,5 @@ class PreAudio:
 
     def save(self, savePath):
         with gzip.open(os.path.join(savePath, self.name+'.pgz'), 'wb') as pgz:
-            cPickle.dump(self, pgz)
+            pickle.dump(self, pgz)
         # print "create ", self.name
