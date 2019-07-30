@@ -42,7 +42,7 @@ def segment(fileLocation, toLocation,songLocation, songToLocation):
             segments = list()
             boundaries *= 1000
             buff = 2500
-            for index in xrange(1,len(boundaries)):
+            for index in range(1,len(boundaries)):
                 if index == 1 or index == len(boundaries)-2 : continue
                 elif index == 2 or index == len(boundaries)-1 :
                     segments.append(song[max(0, boundaries[index-2]-buff)
@@ -50,7 +50,7 @@ def segment(fileLocation, toLocation,songLocation, songToLocation):
                 else:
                     segments.append(song[boundaries[index-1]-buff:boundaries[index]+buff])
 
-            for index in xrange(len(segments)):
+            for index in range(len(segments)):
                 output = filename[:filename.rfind('.')] + '_' + str(index+1) + filename[filename.rfind('.'):]
                 out_format = filename.split('.')[-1]
                 segments[index].export(os.path.join(toLocation, output), format = out_format)
@@ -79,7 +79,7 @@ def segment(fileLocation, toLocation,songLocation, songToLocation):
                 boundaries = songBoundary[filename[:filename.rfind('.')]]
             print (boundaries)
 
-            for index in xrange(1,len(boundaries)):
+            for index in range(1,len(boundaries)):
                 if index == 1 or index == len(boundaries)-2 : continue
                 elif index == 2 or index == len(boundaries)-1 :
                     segments.append(song[max(0, boundaries[index-2]-buff)
@@ -87,7 +87,7 @@ def segment(fileLocation, toLocation,songLocation, songToLocation):
                 else:
                     segments.append(song[boundaries[index-1]-buff:boundaries[index]+buff])
 
-            for index in xrange(len(segments)):
+            for index in range(len(segments)):
                 output = filename[:filename.rfind('.')] + '_' + str(index+1) + filename[filename.rfind('.'):]
                 out_format = filename.split('.')[-1]
                 segments[index].export(os.path.join(songToLocation, output), format = out_format)

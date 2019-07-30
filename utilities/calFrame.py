@@ -6,7 +6,7 @@ import librosa
 def encodingPrint(string):
     # a = '\n'.join(string)
     sys.stdout.write('\n'.join(string))
-    print '\n'
+    print('\n')
 
 
 
@@ -58,5 +58,5 @@ else:
     with open(os.path.join(sys.argv[2],'metadata.csv'),'w') as csv:
         csv.write('song name,avg frame,total frame,segmentation count\n') # write csv title
         for song, data in song_dict.iteritems():
-            print data
+            print(data)
             csv.write(song+','+str(data[0]/data[1])+','+str(data[0])+','+str(data[1])+'\n')
